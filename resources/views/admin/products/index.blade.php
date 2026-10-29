@@ -1,103 +1,104 @@
-
 @extends('admin.layout')
 
+@section('title', 'Products')
+@section('topbar-title', 'Products')
+
 @section('content')
-<div style="padding: 25px;">
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 12px;">
+    <div class="page-heading">
         <div>
-            <h2 style="margin: 0 0 8px;">Products</h2>
-            <p style="margin: 0; color: #6b7280;">Manage your products and categories.</p>
+            <div class="eyebrow">Product management</div>
+            <h1>Products</h1>
+            <p>Manage the products shown on your website.</p>
         </div>
-
-        <a href="{{ route('admin.products.create') }}"
-           style="background: #2563eb; color: white; padding: 11px 18px; border-radius: 6px; text-decoration: none;">
-            + Add Product
-        </a>
+        <a href="{{ route('admin.products.create') }}" class="button">+ Add Product</a>
     </div>
 
-    @if (session('success'))
-        <div style="background: #dcfce7; color: #166534; padding: 14px; border-radius: 6px; margin-bottom: 20px;">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="panel">
+        <form method="GET" action="{{ route('admin.products.index') }}" class="toolbar">
+            <input class="input search" type="search" name="search" value="{{ $search }}"
+                   placeholder="Search by product name" aria-label="Search products">
 
-    <div style="overflow-x: auto; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-            <thead style="background: #f3f4f6;">
-                <tr>
-                    <th style="padding: 14px;">Image</th>
-                    <th style="padding: 14px;">Name</th>
-                    <th style="padding: 14px;">Category</th>
-                    <th style="padding: 14px;">Price</th>
-                    <th style="padding: 14px;">Status</th>
-                    <th style="padding: 14px;">Actions</th>
-                </tr>
-            </thead>
+            <select class="input" name="category" aria-label="Filter by category">
+                <option value="">All categories</option>
+                <option value="none" {{ $categoryId === 'none' ? 'selected' : '' }}>No category</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ (string) $categoryId === (string) $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
 
-            <tbody>
-                @forelse ($products as $product)
-                    <tr style="border-top: 1px solid #e5e7eb;">
-                        <td style="padding: 14px;">
-                            @if ($product->image_path)
-                                <img src="{{ asset('storage/' . $product->image_path) }}"
-                                     alt="{{ $product->name }}"
-                                     style="width: 55px; height: 55px; object-fit: cover; border-radius: 6px;">
-                            @else
-                                <span style="color: #9ca3af;">No image</span>
-                            @endif
-                        </td>
+            <select class="input" name="status" aria-label="Filter by status">
+                <option value="">All statuses</option>
+                <option value="active" {{ $status === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ $status === 'inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
 
-                        <td style="padding: 14px;">{{ $product->name }}</td>
+            <button type="submit" class="button">Filter</button>
+            @if ($search !== '' || $status || $categoryId)
+                <a href="{{ route('admin.products.index') }}" class="button button-light">Reset</a>
+            @endif
+        </form>
 
-                        <td style="padding: 14px;">
-                            {{ $product->category?->name ?? 'Uncategorized' }}
-                        </td>
+        @if ($products->isEmpty())
+            <div class="empty">
+                @if ($search !== '' || $status || $categoryId)
+                    <strong>No products match your filters</strong>
+                    <p>Try a different search term or reset the filters.</p>
+                    <a href="{{ route('admin.products.index') }}" class="button button-light">Reset filters</a>
+                @else
+                    <strong>No products yet</strong>
+                    <p>Add your first product to show it on the website.</p>
+                    <a href="{{ route('admin.products.create') }}" class="button">+ Add Product</a>
+                @endif
+            </div>
+        @else
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th style="text-align:right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($products as $product)
+                            <tr>
+                                <td>
+                                    @if ($product->image_path)
+                                        <img class="thumb" src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}" loading="lazy">
+                                    @else
+                                        <div class="thumb-empty">No image</div>
+                                    @endif
+                                </td>
+                                <td><strong>{{ $product->name }}</strong></td>
+                                <td>{{ $product->category?->name ?? 'Uncategorized' }}</td>
+                                <td>{{ number_format((float) $product->price, 2) }}</td>
+                                <td>
+                                    <span class="badge {{ $product->is_active ? 'badge-success' : 'badge-muted' }}">
+                                        {{ $product->is_active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="actions">
+                                    <a href="{{ route('admin.products.edit', $product) }}" class="button button-light button-sm">Edit</a>
+                                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST"
+                                          data-confirm="Delete “{{ $product->name }}”? This cannot be undone.">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="button button-danger button-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-                        <td style="padding: 14px;">{{ number_format((float) $product->price, 2) }}</td>
-
-                        <td style="padding: 14px;">
-                            @if ($product->is_active)
-                                <span style="color: #15803d;">Active</span>
-                            @else
-                                <span style="color: #dc2626;">Inactive</span>
-                            @endif
-                        </td>
-
-                        <td style="padding: 14px; white-space: nowrap;">
-                            <a href="{{ route('admin.products.edit', $product) }}"
-                               style="color: #2563eb; text-decoration: none; margin-right: 10px;">
-                                Edit
-                            </a>
-
-                            <form action="{{ route('admin.products.destroy', $product) }}"
-                                  method="POST"
-                                  style="display: inline;"
-                                  onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit"
-                                        style="color: #dc2626; border: none; background: none; cursor: pointer;">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" style="padding: 25px; text-align: center; color: #6b7280;">
-                            No products found. Click "Add Product" to create your first product.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+            {{ $products->links() }}
+        @endif
     </div>
-
-    <div style="margin-top: 20px;">
-        {{ $products->links() }}
-    </div>
-
-</div>
 @endsection

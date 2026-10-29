@@ -10,14 +10,21 @@ use Illuminate\Validation\Rule;
 
 class ProductCategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->query('search'));
+        $status = $request->query('status');
+
         $categories = ProductCategory::withCount('products')
+            ->when($search !== '', fn ($query) => $query->where('name', 'like', '%'.$search.'%'))
+            ->when($status === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($status === 'inactive', fn ($query) => $query->where('is_active', false))
             ->orderBy('sort_order')
             ->latest('updated_at')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('admin.categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories', 'search', 'status'));
     }
 
     public function create()

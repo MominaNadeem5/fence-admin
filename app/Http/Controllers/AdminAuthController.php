@@ -25,14 +25,14 @@ class AdminAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             if (! Auth::user()->is_admin) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
                 return back()->withErrors([
-                    'email' => 'Is account ko admin access nahi hai.',
+                    'email' => 'This account does not have admin access.',
                 ])->onlyInput('email');
             }
 
@@ -42,7 +42,7 @@ class AdminAuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Email ya password ghalat hai.',
+            'email' => 'These credentials do not match our records.',
         ])->onlyInput('email');
     }
 

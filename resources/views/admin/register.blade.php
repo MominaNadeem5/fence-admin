@@ -1,92 +1,56 @@
+@extends('admin.layout')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Registration</title>
-    <style>
-        * { box-sizing: border-box; }
+@section('title', 'Add Admin')
+@section('topbar-title', 'Add Admin')
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            background: #f3f6f4;
-            font-family: Arial, sans-serif;
-        }
+@section('content')
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">Access control</div>
+            <h1>Add admin</h1>
+            <p>Only signed-in admins can create other admin accounts. Public registration is disabled.</p>
+        </div>
+    </div>
 
-        .card {
-            background: white;
-            padding: 35px;
-            border-radius: 14px;
-            width: min(420px, 92%);
-            box-shadow: 0 8px 30px #00000012;
-        }
-
-        h1 { color: #183c2b; margin-top: 0; }
-
-        label {
-            display: block;
-            margin: 16px 0 7px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 22px;
-            padding: 13px;
-            border: 0;
-            border-radius: 7px;
-            background: #245b3c;
-            color: white;
-            cursor: pointer;
-        }
-
-        .error { color: #c62828; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1>Create Admin Account</h1>
-        <p>Register an authorized administrator.</p>
-
-        @if ($errors->any())
-            <div class="error">
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
-            </div>
-        @endif
-
-        <form method="POST" action="{{ url('/admin/register') }}">
+    <div class="panel" style="max-width: 720px;">
+        <form method="POST" action="{{ route('admin.register') }}" autocomplete="off">
             @csrf
 
-            <label for="name">Full Name</label>
-            <input id="name" type="text" name="name"
-                   value="{{ old('name') }}" required>
+            <div class="form-grid">
+                <div class="field full">
+                    <label for="name">Full name *</label>
+                    <input id="name" type="text" name="name" value="{{ old('name') }}"
+                           class="{{ $errors->has('name') ? 'is-invalid' : '' }}" required>
+                    @error('name') <span class="error-text">{{ $message }}</span> @enderror
+                </div>
 
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email"
-                   value="{{ old('email') }}" required>
+                <div class="field full">
+                    <label for="email">Email address *</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}"
+                           class="{{ $errors->has('email') ? 'is-invalid' : '' }}" required>
+                    @error('email') <span class="error-text">{{ $message }}</span> @enderror
+                </div>
 
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password"
-                   minlength="8" required>
+                <div class="field">
+                    <label for="password">Password *</label>
+                    <input id="password" type="password" name="password" minlength="8"
+                           autocomplete="new-password"
+                           class="{{ $errors->has('password') ? 'is-invalid' : '' }}" required>
+                    <div class="hint">At least 8 characters.</div>
+                    @error('password') <span class="error-text">{{ $message }}</span> @enderror
+                </div>
 
-            <label for="password_confirmation">Confirm Password</label>
-            <input id="password_confirmation" type="password"
-                   name="password_confirmation" minlength="8" required>
+                <div class="field">
+                    <label for="password_confirmation">Confirm password *</label>
+                    <input id="password_confirmation" type="password" name="password_confirmation"
+                           minlength="8" autocomplete="new-password" required>
+                </div>
+            </div>
 
-            <button type="submit">Create Account</button>
+            <div class="form-footer">
+                <a href="{{ route('admin.dashboard') }}" class="button button-light">Cancel</a>
+                <button type="submit" class="button">Create admin</button>
+            </div>
         </form>
     </div>
-</body>
-</html>
+@endsection

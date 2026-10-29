@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebsiteContentController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -65,9 +66,9 @@ Route::post('/admin/register', [AdminAuthController::class, 'register'])
     ->middleware(['auth', 'admin', 'throttle:5,1']);
 
 // Protected dashboard
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'admin'])->name('admin.dashboard');
+Route::get('/admin', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.dashboard');
 
 // Logout
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])

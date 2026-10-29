@@ -50,7 +50,7 @@
     }
 
     .category-save-btn {
-        background: #244b35;
+        background: #214780;
         color: #fff;
     }
 
@@ -125,7 +125,7 @@
     .category-edit-field input:focus,
     .category-edit-field textarea:focus {
         outline: none;
-        border-color: #557b60;
+        border-color: #537ec0;
         box-shadow: 0 0 0 3px rgba(85, 123, 96, .12);
     }
 
@@ -172,7 +172,7 @@
     .category-edit-status input {
         width: 18px;
         height: 18px;
-        accent-color: #244b35;
+        accent-color: #214780;
     }
 
     .category-edit-actions {
@@ -234,12 +234,6 @@
             ← Back to Categories
         </a>
     </div>
-
-    @if ($errors->any())
-        <div style="padding: 14px 18px; margin-bottom: 20px; border-radius: 9px; background: #fef2f2; color: #991b1b;">
-            Please check the highlighted fields and try again.
-        </div>
-    @endif
 
     <div class="category-edit-card">
         <div class="category-edit-card-heading">

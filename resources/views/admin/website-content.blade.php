@@ -17,23 +17,6 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            ✓ &nbsp; {{ session('success') }}
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-error">
-            <strong>Please correct the following:</strong>
-            <ul style="margin-bottom:0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <form
         action="{{ route('admin.website-content.update') }}"
         method="POST"

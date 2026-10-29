@@ -9,7 +9,7 @@
     .category-edit-header p { margin: 0; color: #6b7280; font-size: 14px; }
     .category-edit-btn { display: inline-flex; align-items: center; justify-content: center; padding: 11px 18px; border-radius: 9px; text-decoration: none; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid #dfe4df; background: #fff; color: #374151; }
     .category-back-btn { background: #fff; }
-    .category-save-btn { background: #244b35; border-color: #244b35; color: #fff; }
+    .category-save-btn { background: #214780; border-color: #214780; color: #fff; }
     .category-edit-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
     .category-edit-card-heading { padding: 22px 26px; border-bottom: 1px solid #edf0ed; }
     .category-edit-card-heading h2 { margin: 0 0 6px; font-size: 18px; }
@@ -21,12 +21,12 @@
     .category-edit-field label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #374151; }
     .category-edit-field input:not([type="checkbox"]), .category-edit-field textarea { box-sizing: border-box; width: 100%; padding: 12px 13px; border: 1px solid #dfe4df; border-radius: 8px; background: #fff; color: #1f2937; font: inherit; font-size: 14px; }
     .category-edit-field textarea { min-height: 120px; resize: vertical; }
-    .category-edit-field input:focus, .category-edit-field textarea:focus { outline: none; border-color: #557b60; box-shadow: 0 0 0 3px rgba(85,123,96,.12); }
+    .category-edit-field input:focus, .category-edit-field textarea:focus { outline: none; border-color: #537ec0; box-shadow: 0 0 0 3px rgba(83,126,192,.12); }
     .category-edit-help { display: block; margin-top: 8px; color: #6b7280; font-size: 12px; }
     .category-edit-status { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding: 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fafbf9; }
     .category-edit-status strong { display: block; font-size: 14px; }
     .category-edit-status small { display: block; color: #6b7280; margin-top: 4px; font-size: 12px; }
-    .category-edit-status input { width: 18px; height: 18px; accent-color: #244b35; }
+    .category-edit-status input { width: 18px; height: 18px; accent-color: #214780; }
     .category-edit-actions { display: flex; justify-content: flex-end; gap: 12px; padding-top: 22px; border-top: 1px solid #edf0ed; margin-top: 22px; }
     .category-edit-error { display: block; color: #b91c1c; margin-top: 6px; font-size: 12px; }
     @media (max-width: 650px) {
@@ -49,12 +49,6 @@
             Back to Categories
         </a>
     </div>
-
-    @if ($errors->any())
-        <div style="padding:14px 18px;margin-bottom:20px;border-radius:9px;background:#fef2f2;color:#991b1b;">
-            Please check the highlighted fields and try again.
-        </div>
-    @endif
 
     <div class="category-edit-card">
         <div class="category-edit-card-heading">

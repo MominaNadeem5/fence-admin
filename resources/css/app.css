@@ -104,6 +104,19 @@ button {
     color: var(--green);
 }
 
+.nav-links > a.nav-admin {
+    padding: 11px 18px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.nav-links > a.nav-admin:hover {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+}
+
 .nav-cta {
     padding: 14px 20px;
     background: var(--green);

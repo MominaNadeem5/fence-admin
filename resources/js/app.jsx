@@ -102,6 +102,9 @@ function App() {
                     <a href="#contact" onClick={() => setMenuOpen(false)}>
                         Contact
                     </a>
+                    <a className="nav-admin" href="/admin/login">
+                        Admin Login
+                    </a>
                     <a
                         className="nav-cta"
                         href="#contact"
@@ -395,7 +398,11 @@ style={{
                         © {new Date().getFullYear()} {settings.brand_name}.
                         All rights reserved.
                     </span>
-                    <a href="#home">Back to top ↑</a>
+                    <span>
+                        <a href="/admin/login">Admin Login</a>
+                        {' · '}
+                        <a href="#home">Back to top ↑</a>
+                    </span>
                 </div>
             </footer>
         </>
